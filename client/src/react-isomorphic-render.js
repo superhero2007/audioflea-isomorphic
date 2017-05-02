@@ -13,7 +13,7 @@ export default
 	routes,
 	wrapper,
 
-	catch(error, { path, url, redirect, dispatch, getState, server })
+	error(error, { path, url, redirect, dispatch, getState, server })
 	{
 		console.error(`Error while preloading "${url}"`)
 		console.error(error)
@@ -30,13 +30,17 @@ export default
 		// 	return redirect('/unauthorized')
 		// }
 
-		// Redirect to a generic error page
+		// Redirect to a generic error page in production
 		if (process.env.NODE_ENV === 'production')
 		{
-			redirect('/error')
+			// Prevents infinite redirect to the error page
+			// in case of overall page rendering bugs, etc.
+			if (path !== '/error')
+			{
+				// Redirect to a generic error page
+				return redirect(add_redirect('/error', url))
+			}
 		}
-
-		throw error
 	},
 
 	...asyncSettings
