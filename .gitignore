@@ -26,3 +26,5 @@ coverage
 /config/development.json
 client/img
 client/blog
+.sass-cache
+styles_output
